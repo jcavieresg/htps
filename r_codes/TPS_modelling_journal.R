@@ -255,7 +255,6 @@ library(tidyverse)
 
 par(mfrow=c(1,3))
 
-pdf('plot4.pdf')
 par(mar = c(2, 2, 2, 3)) 
 scatter3D(fit$epoints[,1], fit$epoints[, 2], sol_eval, bty = "g", pch = ".", cex = 4, 
           theta = 132, phi = 25, colkey = list(side = 4, length = 1, cex.axis = 1.6), 
@@ -263,25 +262,25 @@ scatter3D(fit$epoints[,1], fit$epoints[, 2], sol_eval, bty = "g", pch = ".", cex
           main="M1", xlab = "x", cex.main = 2.0, cex.lab = 1.8,
           ylab = "y",
           zlab = "Values" )
-dev.off()
 
-pdf('plot5.pdf')
+
+
 scatter3D(fit$epoints[,1], fit$epoints[, 2], sol_evalCG, bty = "g", pch = ".", cex = 4, 
           theta = 132, phi = 25, colkey = list(side = 4, length = 1, cex.axis = 1.6), 
           col = ramp.col(c("darkolivegreen1",  "darkolivegreen3", "dodgerblue2")),
           main="M2", xlab = "x", cex.main = 2.0, cex.lab = 1.8,
           ylab = "y",
           zlab = "Values" )
-dev.off()
 
-pdf('plot6.pdf')
+
+
 scatter3D(fit$epoints[,1], fit$epoints[, 2], sol_evalCGH, bty = "g", pch = ".", cex = 4, 
           theta = 132, phi = 25, colkey = list(side = 4, length = 1, cex.axis = 1.6), 
           col = ramp.col(c("darkolivegreen1",  "darkolivegreen3", "dodgerblue2")),
           main="M3", xlab = "x", cex.main = 2.0, cex.lab = 1.8,
           ylab = "y",
           zlab = "Values")
-dev.off()
+
 
 
 
@@ -329,45 +328,12 @@ ggplot(newData, aes(log(x), log(value), colour = L1)) +
         axis.title=element_text(size=14,face="bold")) 
 
 
-# colnames(df1) <- c("x", "y1")
-# colnames(df2) <- c("x", "y2")
-# colnames(df3) <- c("x", "y3")
-# colnames(do2) <- c("x", "y4")
-# colnames(do3) <- c("x", "y5")
-# 
-# colors <- c("y1" = "blue", "y2" = "#E69F00", "y3" = "red" , "y4" = "brown1", "y5" = "darkblue")
-# 
-# ggplot(data=df1, aes(x=log(x), y=log(y1), color = "y1")) + 
-#   geom_point(data=df1, aes(x=log(x), y=log(y1), color='y1'), size = 2) + 
-#   geom_line(data=df1, aes(x=log(x), y=log(y1), color='y1'),linetype = "dashed") + 
-#   geom_point(data=df2, aes(x=log(x), y=log(y2), color='y2'), size = 2) + 
-#   geom_point(data=df3, aes(x=log(x), y=log(y3), color='y3'), size = 2) +
-#   geom_line(data=df2, aes(x=log(x), y=log(y2), color='y2'), linetype = "dashed") + 
-#   geom_line(data=df3, aes(x=log(x), y=log(y3), color='y3'), linetype = "dashed") +
-#   geom_line(data=do2, aes(x=log(x), y=log(y4), color='y4'), linetype = "dotted", size = 1) +
-#   geom_line(data=do3, aes(x=log(x), y=log(y5), color='y5'), linetype = "dotted", size = 1) +
-#   xlab("log(number of sites)") +
-#   ylab("log(time)") + 
-#   labs(color='Methods')  +
-#   scale_color_manual(values = colors, labels = c("M1", "M2", "M3", "Lineal", "Cubic"), 
-#                       guide = guide_legend(override.aes = list(
-#                        linetype = c("dashed", "dashed", "dashed"),
-#                        shape = c(16, 16, 16)))) + 
-#   theme(legend.title = element_text(size=18),
-#         legend.text = element_text(size=16),
-#         axis.text=element_text(size=14, face = "bold"),
-#         legend.position="top",
-#         axis.title=element_text(size=14,face="bold")) 
-
-
-        
-
 
 
 
 
 #=================================================
-#             For the errors
+#             Error plots
 #=================================================
 library(dplyr)
 df4 <- data.frame(nosites, error_full_cg)
@@ -401,8 +367,8 @@ ggplot(newdata3, aes(x = log(nosites))) +
 
 
 
-# Table 1
-# Error de coeficientes estimados 
+# Table 
+# Errors
 error_solcg <- norm(sol0 - solf); error_solcg
 error_solh <- norm(sol0 - solh); error_solh
 
@@ -410,7 +376,7 @@ error_solh <- norm(sol0 - solh); error_solh
 # RMS error
 exact <- testfunction(matrix(fit$epoints[, 1]), matrix(fit$epoints[, 2])) 
 
-# Evalution of the function in epoints created in Matlab
+# Evalution of the function in epoints created in RcppArmadillo
 DM_val <- DistanceMatrix(fit$epoints, loc)
 EM_val <- radialFunction(DM_val, 2, 1.0, shape)
 T0_val <- cbind(1,fit$epoints)
@@ -421,7 +387,7 @@ solh_eval <- M0_val %*% solh
 
 neval <- dim(fit$epoints)[1]/40
 
-# Tabla 2
+# Table
 exact_sol0 <- norm(sol_eval - exact); exact_sol0 
 exact_solf <- norm(solf_eval - exact); exact_solf 
 exact_solh <- norm(solh_eval - exact); exact_solh
