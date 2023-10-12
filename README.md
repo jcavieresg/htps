@@ -3,7 +3,7 @@
 
 This repository contain a reproducible example of the article "Efficient estimation for a smoothing thin plate spline in a two-dimensional space". For this, do the following:
 
-1. Download all the folders of this this repository.
+1. Download all the folders of this repository.
 2. Copya and paste the folder $\textbf{htps}$ in your desktop. 
 3. Download the Microsoft SDK (to use MPI in Windows): https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/
 4. Make sure link the $\texttt{c++}$ header library "htool" and the MPI folder to your $\texttt{Makevars}$ files correctly. For example, in the $\textbf{src}$ folder of the "htps" library you can find two $\texttt{Makevars}$ files: $\texttt{Makevars.win}$ and $\texttt{Makevars}$. So, for the $\texttt{Makevars.win}$:
