@@ -14,7 +14,7 @@ This repository contain a reproducible example of the article "Efficient estimat
 * PKG_LIBS = `$`(SHLIB_OPENMP_CXXFLAGS) `$`(LAPACK_LIBS) `$`(BLAS_LIBS) `$`(FLIBS) -L"C:/Program Files (x86)/Microsoft SDKs/MPI/Lib/x64" -lmsmpi
 </br>
 
-and the same for $\texttt{Makevars}$ file. For this example, you should change the name of the "Usuario" by the name that you are using in your pc/laptop.
+and the same for $\texttt{Makevars}$ file. Of course, you should replace 'Usuario' with the username you are using on your PC or laptop.
    
 5. Compile the "htps" library in R using "Rcpp" by following the the "build_package.R" code.
 6. Run the "htps.R" code to reproduce the results.
