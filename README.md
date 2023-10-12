@@ -13,4 +13,5 @@ This repository contain a reproducible example of the article "Efficient estimat
 
 and the same for $\texttt{Makevars}$. 
    
-5. Compile the "htps" library using "Rcpp" of R. 
+5. Compile the "htps" library using "Rcpp" of R.
+6. Run the "htps.R" example to reproduce the results. 
