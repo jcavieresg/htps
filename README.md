@@ -25,7 +25,5 @@ The "htool" library used in this experiment is a slight adaptation of the origin
 
 If you have any suggestions or would like to improve the way "htool" is linked with R, please feel free to send an email to: j.cavieres.g@gmail.com
 
-[plot_hmat.pdf](https://github.com/jcavieresg/htps/files/12880012/plot_hmat.pdf)
 
-[plot_tpsr_vs_m3.pdf](https://github.com/jcavieresg/htps/files/12880011/plot_tpsr_vs_m3.pdf)
 
