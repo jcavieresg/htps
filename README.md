@@ -14,7 +14,7 @@ This repository contain a reproducible example of the article "Efficient estimat
 * PKG_LIBS = `$`(SHLIB_OPENMP_CXXFLAGS) `$`(LAPACK_LIBS) `$`(BLAS_LIBS) `$`(FLIBS) -L"C:/Program Files (x86)/Microsoft SDKs/MPI/Lib/x64" -lmsmpi
 </br>
 
-and the same for $\texttt{Makevars}$. 
+and the same for $\texttt{Makevars}$ file. 
    
 5. Compile the "htps" library using "Rcpp" of R following the "build_package.R" code. 
 6. Run the "htps.R" code that you can find in the $\textbf{r_codes}" of this repository to reproduce the results. 
