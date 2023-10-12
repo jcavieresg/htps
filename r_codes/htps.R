@@ -205,14 +205,11 @@ for (k in 1:length(K)){
   time_hmat[k] <- toc 
   error_hmat[k] <- norm(as.matrix(sol0)- as.matrix(solh))
   error_hmat[k] <- norm(as.matrix(head(sol0, -3))- as.matrix(head(solh, -3)))
-  
-  
-  # Finalize MPI
-  mpifinalize()
-  
 }
 #=======================================================================================================
 
+  # Finalize MPI
+  mpifinalize()
 
 
 
