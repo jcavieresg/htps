@@ -88,6 +88,19 @@ arma::mat testfunction(arma::mat x, arma::mat y){
 
 
 
+////////////////////////////////////////////////////////////
+// [[Rcpp::export]]
+arma::mat testfunction_random(arma::mat x, arma::mat y){
+  int n  = x.n_rows;
+  arma::mat value(size(x));
+
+  value = f1(x, y) + f2(x, y) + f3(x, y) - f4(x, y) + arma::randn(n);
+
+  return value;
+}
+//______________________________________________________________________________________
+
+
 
 ////////////////////////////////////////////////////////////
 // [[Rcpp::export]]
@@ -142,6 +155,28 @@ arma::mat DistanceMatrix(const arma::mat dsites, const arma::mat ctrs){
   for (int i = 0; i < M; i++){
     for (int j = 0; j < N; j++){
       DM_data(i, j) = norm(dsites.row(i) - ctrs.row(j));
+    }
+  }
+  return(DM_data);
+}
+//_______________________________________________________________________________
+
+
+
+////////////////////////////////////////////////////////////
+// [[Rcpp::export]]
+arma::mat euclidean_dist(const arma::mat dsites){
+  
+  int n  = dsites.n_rows;
+  // int dim = dsites.n_cols;
+  // int N   = ctrs.n_rows;
+  arma::mat DM_data(n, n, fill::zeros);
+  //arma::mat DM_data(M, N, arma::fill::zeros);
+  
+  for (int i = 0; i < n; i++){
+    for (int j = 0; j < i; j++){
+      DM_data(i, j) = sqrt(sum(pow(dsites.row(i) - dsites.row(j), 2)));
+      DM_data(j, i) = DM_data(i, j);
     }
   }
   return(DM_data);
@@ -271,12 +306,15 @@ Rcpp::List PLS(arma::mat dsites, arma::mat ctrs, int RBFtype, const double R, co
   // Calcular solucíon exacta, por ejemplo: evaluar 'testfunction' en los puntos de evaluacion
   // linea 26 programa 19.2
   arma::colvec exact = testfunction(epoints.col(0), epoints.col(1));
+  //arma::colvec exact = testfunction_random(epoints.col(0), epoints.col(1));
   
   // Calcular el error maximo en la grilla
   // linea 27 del programa 19.2
   double maxerr = norm(Pf - exact, "inf");
   
-  return Rcpp::List::create(Rcpp::Named("phi_coefficients") = IM,
+  return Rcpp::List::create(Rcpp::Named("A") = A,
+                            Rcpp::Named("response") = rhs3,
+                            Rcpp::Named("Epa") = IM,
                             Rcpp::Named("Pf")       = Pf,
                             Rcpp::Named("Pf0")       = Pf0,
                             Rcpp::Named("maxerr")  = maxerr,

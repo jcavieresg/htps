@@ -21,12 +21,20 @@ testfunction <- function(x, y) {
     .Call(`_testTPS_testfunction`, x, y)
 }
 
+testfunction_random <- function(x, y) {
+    .Call(`_testTPS_testfunction_random`, x, y)
+}
+
 meshgrid <- function(x, y, xv, yv) {
     invisible(.Call(`_testTPS_meshgrid`, x, y, xv, yv))
 }
 
 DistanceMatrix <- function(dsites, ctrs) {
     .Call(`_testTPS_DistanceMatrix`, dsites, ctrs)
+}
+
+euclidean_dist <- function(dsites) {
+    .Call(`_testTPS_euclidean_dist`, dsites)
 }
 
 radialFunction <- function(r, RBFtype, R, shape) {

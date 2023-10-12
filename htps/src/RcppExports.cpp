@@ -67,6 +67,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// testfunction_random
+arma::mat testfunction_random(arma::mat x, arma::mat y);
+RcppExport SEXP _testTPS_testfunction_random(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(testfunction_random(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
 // meshgrid
 void meshgrid(arma::mat& x, arma::mat& y, arma::vec& xv, arma::vec& yv);
 RcppExport SEXP _testTPS_meshgrid(SEXP xSEXP, SEXP ySEXP, SEXP xvSEXP, SEXP yvSEXP) {
@@ -89,6 +101,17 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::mat >::type dsites(dsitesSEXP);
     Rcpp::traits::input_parameter< const arma::mat >::type ctrs(ctrsSEXP);
     rcpp_result_gen = Rcpp::wrap(DistanceMatrix(dsites, ctrs));
+    return rcpp_result_gen;
+END_RCPP
+}
+// euclidean_dist
+arma::mat euclidean_dist(const arma::mat dsites);
+RcppExport SEXP _testTPS_euclidean_dist(SEXP dsitesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat >::type dsites(dsitesSEXP);
+    rcpp_result_gen = Rcpp::wrap(euclidean_dist(dsites));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -191,8 +214,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_testTPS_f3", (DL_FUNC) &_testTPS_f3, 2},
     {"_testTPS_f4", (DL_FUNC) &_testTPS_f4, 2},
     {"_testTPS_testfunction", (DL_FUNC) &_testTPS_testfunction, 2},
+    {"_testTPS_testfunction_random", (DL_FUNC) &_testTPS_testfunction_random, 2},
     {"_testTPS_meshgrid", (DL_FUNC) &_testTPS_meshgrid, 4},
     {"_testTPS_DistanceMatrix", (DL_FUNC) &_testTPS_DistanceMatrix, 2},
+    {"_testTPS_euclidean_dist", (DL_FUNC) &_testTPS_euclidean_dist, 1},
     {"_testTPS_radialFunction", (DL_FUNC) &_testTPS_radialFunction, 4},
     {"_testTPS_PLS", (DL_FUNC) &_testTPS_PLS, 7},
     {"_testTPS_testTps", (DL_FUNC) &_testTPS_testTps, 4},
