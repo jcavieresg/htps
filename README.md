@@ -10,7 +10,7 @@ This repository contain a reproducible example of the article "Efficient estimat
 </br>
 
 * CXX_STD = CXX11
-* PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS) -I/Users/Usuario/Desktop/htps/htool/include -I"C:/Program Files (x86)/Microsoft SDKs/MPI/Include"
+* PKG_CXXFLAGS = `$`(SHLIB_OPENMP_CXXFLAGS) -I/Users/Usuario/Desktop/htps/htool/include -I"C:/Program Files (x86)/Microsoft SDKs/MPI/Include"
 * PKG_LIBS = `$`(SHLIB_OPENMP_CXXFLAGS) `$`(LAPACK_LIBS) `$`(BLAS_LIBS) `$`(FLIBS) -L"C:/Program Files (x86)/Microsoft SDKs/MPI/Lib/x64" -lmsmpi
 </br>
 
