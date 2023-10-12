@@ -3,4 +3,4 @@
 
 This repo contain a reproducible example of the article "Efficient estimation for a smoothing thin plate spline in a two-dimensional space". For this, do the following:
 
- * lalal
+1. Download the \texttt{htps} library from this repo.
