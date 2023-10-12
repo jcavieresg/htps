@@ -16,7 +16,7 @@ This repository contain a reproducible example of the article "Efficient estimat
 
 and the same for $\texttt{Makevars}$ file. Of course, you should replace 'Usuario' with the username you are using on your PC or laptop.
    
-5. Compile the "htps" library in R using "Rcpp" by following the the "build_package.R" code.
+5. Compile the $\texttt{htps}$ function that is in the $\textbf{htps}$ folder using "Rcpp" by following the the "build_package.R" code.
 6. Run the "htps.R" code to reproduce the results.
 
 **IMPORTANT**
