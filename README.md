@@ -20,7 +20,7 @@ and the same for $\texttt{Makevars}$ file.
 6. Run the "htps.R" code to reproduce the results.
 
 **IMPORTANT**
-The "htool" library used in this experiment is a slight adaptation of the original library written in C++. For a more comprehensive and original version of "htool", you can find it at the following link: https://htool-documentation.readthedocs.io/en/latest/
+The "htool" library used in this experiment is a slight adaptation of the original library written in $\texttt{c++}$ ([https://htool-documentation.readthedocs.io/en/latest/](https://github.com/htool-ddm/htool)). For a more comprehensive and original version of "htool" follow this link: https://htool-documentation.readthedocs.io/en/latest/
 
 
 If you have any suggestions or would like to improve the way "htool" is linked with R, please feel free to send an email to: j.cavieres.g@gmail.com
