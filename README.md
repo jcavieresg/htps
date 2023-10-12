@@ -19,7 +19,7 @@ and the same for $\texttt{Makevars}$ file.
 5. Compile the "htps" library using "Rcpp" of R following the "build_package.R" code. 
 6. Run the "htps.R" code to reproduce the results.
 
-**Important information**
+**IMPORTANT**
 The "htool" library used in this experiment is a slight adaptation of the original library written in C++. For a more comprehensive and original version of "htool", you can find it at the following link: https://htool-documentation.readthedocs.io/en/latest/
 
 
