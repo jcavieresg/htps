@@ -4,9 +4,10 @@
 This repository contain a reproducible example of the article "Efficient estimation for a smoothing thin plate spline in a two-dimensional space". For this, do the following:
 
 1. Download all the folders of this repository.
-2. Copy a and paste the folder $\textbf{htps}$ in your desktop. 
-3. Download the Microsoft SDK (to use MPI on Windows): https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/
-4. Ensure that you correctly link the "htool" $\texttt{c++}$ header library and the MPI folder in your $\texttt{Makevars}$ files. For example, in the $\textbf{src}$ folder of the "htps" library you can find two $\texttt{Makevars}$ files: $\texttt{Makevars.win}$ and $\texttt{Makevars}$. So, for the $\texttt{Makevars.win}$:
+2. Copy a and paste the folder $\textbf{htps}$ in your desktop.
+3. Download MPI for Windows: https://www.microsoft.com/en-us/download/details.aspx?id=105289
+4. Download the Microsoft SDK (to link the header libraries): https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/
+5. Ensure that you correctly link the "htool" $\texttt{c++}$ header library and the MPI folder in your $\texttt{Makevars}$ files. For example, in the $\textbf{src}$ folder of the "htps" library you can find two $\texttt{Makevars}$ files: $\texttt{Makevars.win}$ and $\texttt{Makevars}$. So, for the $\texttt{Makevars.win}$:
 </br>
 
 * CXX_STD = CXX11
