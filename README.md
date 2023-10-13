@@ -7,7 +7,7 @@ This repository contain a reproducible example of the article "Efficient estimat
 2. Copy a and paste the folder $\textbf{htps}$ in your desktop.
 3. Download MPI for Windows: https://www.microsoft.com/en-us/download/details.aspx?id=105289
 4. Download the Microsoft SDK (to link the header libraries): https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/
-5. Ensure that you correctly link the "htool" $\texttt{c++}$ header library and the MPI folder in your $\texttt{Makevars}$ files. For example, in the $\textbf{src}$ folder of the "htps" library you can find two $\texttt{Makevars}$ files: $\texttt{Makevars.win}$ and $\texttt{Makevars}$. So, for the $\texttt{Makevars.win}$:
+5. Ensure that you correctly link the "htool.hpp" $\texttt{c++}$ header library and the MPI folder in your $\texttt{Makevars}$ files. For example, in the $\textbf{src}$ you can find two $\texttt{Makevars}$ files: $\texttt{Makevars.win}$ and $\texttt{Makevars}$. So, for the $\texttt{Makevars.win}$:
 </br>
 
 * CXX_STD = CXX11
@@ -17,7 +17,7 @@ This repository contain a reproducible example of the article "Efficient estimat
 
 and the same for $\texttt{Makevars}$ file. Of course, you should replace 'Usuario' with the username you are using on your PC or laptop.
    
-5. Compile the $\texttt{htps}$ function that is in the $\textbf{htps}$ folder using "Rcpp" by following the the "build_package.R" code. **Here you also have to replace "Usuario" with the username you are using on your PC or laptop.
+5. Compile the $\texttt{htps.cpp}$ which is in the $\textbf{htps}$ folder using "Rcpp" by following the the "build_package.R" code. \textbf{Here you also have to replace "Usuario" with the username you are using on your PC or laptop}.
 6. Run the "htps.R" code to reproduce the results.
 
 **IMPORTANT**
