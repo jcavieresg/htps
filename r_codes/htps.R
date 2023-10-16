@@ -10,7 +10,7 @@ library(mgcv)
 #===============================================================================================
 #                        Main code of the Smoothing TPS and H-matrix
 #===============================================================================================
-set.seed(1234)                       # Fijamos la semilla
+set.seed(1234)                       # Fix the seed
 library(Metrics)
 
 # Initialize MPI
@@ -26,7 +26,7 @@ time_full <- vector()           # Solve function
 time_full_cg <- vector()        # CG 
 time_hmat <- vector()           # CG + H-matrix
 time_mgcv <- vector()           # CG + H-matrix
-time_krig <- vector()           # CG + H-matrix
+#time_krig <- vector()           # CG + H-matrix
 
 error_full_cg <- vector()       # Error CG
 error_hmat <- vector()          # Error CG + H matrix
@@ -143,7 +143,7 @@ for (k in 1:length(K)){
   # just for testing - full matrix and Schur complement
   M_full <- E11 - S%*%t(M1)
   
-  # lado derecho
+  # rhs
   rhs <- val1 - S%*%val2
   
   y <- calculateTPS_full(rhs, M_full)
@@ -205,14 +205,11 @@ for (k in 1:length(K)){
   time_hmat[k] <- toc 
   error_hmat[k] <- norm(as.matrix(sol0)- as.matrix(solh))
   error_hmat[k] <- norm(as.matrix(head(sol0, -3))- as.matrix(head(solh, -3)))
-  
-  
-  # Finalize MPI
-  mpifinalize()
-  
 }
 #=======================================================================================================
 
+  # Finalize MPI
+  mpifinalize()
 
 
 
@@ -252,6 +249,7 @@ z_pred_sd <- predict(fit_gam, se.fit = TRUE)
 
 #Show points and surface
 par(mfrow = c(1, 2), mar = c(2.5, 2.5, 2.5, 3))
+# GAM model
 scatter3D(xy[, 1], xy[, 2], z_pred, bty = "g", pch = ".", cex = 4,
           theta = 132, phi = 25, 
           colkey = list(side = 4, length = 1, cex.axis = 1.6),
@@ -284,10 +282,6 @@ df2 <- data.frame(nosites, time_hmat)
 # Merge data frames using dplyr package
 newdata <- df1 %>%
   left_join(df2, by = "nosites") 
-
-
-head(newdata)
-
 
 colnames(df1) <- c("x", "y1")
 colnames(df2) <- c("x", "y2")
@@ -327,9 +321,6 @@ df5 <- data.frame(nosites, error_hmat)
 newdata3 <- df4 %>%
   left_join(df5, by = "nosites") 
 
-
-head(newdata3)
-
 colors2 <- c("M1 - TPSR" = "black", "M1 - M3" = "red")
 
 
@@ -358,20 +349,18 @@ grid.arrange(plot1, plot2, ncol= 2)
 
 
 
-# Calculate confidence intervals (95% confidence level)
+# Confidence intervals (95% confidence level)
 conf_level <- 0.95
 z_value <- qnorm(1 - (1 - conf_level) / 2)
 lower_bound <- as.numeric(z_pred) - z_value * z_pred_sd$se.fit
 upper_bound <- as.numeric(z_pred) + z_value * z_pred_sd$se.fit
 
 # Combine the results into a data frame
-results <- data.frame(
-  x = xy[, 1],
-  y = xy[, 2],
-  pred_value = as.numeric(z_pred),
-  lower_conf = lower_bound,
-  upper_conf = upper_bound
-)
+results <- data.frame(x = xy[, 1], 
+                      y = xy[, 2],
+                      pred_value = as.numeric(z_pred), 
+                      lower_conf = lower_bound, 
+                      upper_conf = upper_bound)
 
 plot1 <- ggplot(results, aes(x = x, y = y, fill = pred_value)) +
   geom_tile() +
@@ -393,19 +382,17 @@ plot1 <- ggplot(results, aes(x = x, y = y, fill = pred_value)) +
 
 
 
-# Calculate confidence intervals (95% confidence level)
+# Confidence intervals (95% confidence level)
 conf_level <- 0.95
 z_value <- qnorm(1 - (1 - conf_level) / 2)
 lower_bound <- solh_eval - z_value * 0.03  # 0.03 from the MC simulations
 upper_bound <- solh_eval + z_value * 0.03
 
-results3 <- data.frame(
-  x = xy[, 1],
-  y = xy[, 2],
-  pred_value = as.numeric(solh_eval),
-  lower_conf = lower_bound,
-  upper_conf = upper_bound
-)
+results3 <- data.frame(x = xy[, 1],
+                       y = xy[, 2],
+                       pred_value = as.numeric(solh_eval),
+                       lower_conf = lower_bound,
+                       upper_conf = upper_bound)
 
 plot3 <- ggplot(results3, aes(x = x, y = y, fill = pred_value)) +
   geom_tile() +
