@@ -1,3 +1,0 @@
-[submodule "external/nanogui"]
-	path = external/nanogui
-	url = git@github.com:wjakob/nanogui.git

@@ -3,12 +3,14 @@
 #include <Rcpp.h>
 #include <iostream>
 #include <fstream>
-#include <htool/htool.hpp>
+//#include <htool/htool.hpp>
 #include <omp.h>
 #include <math.h>
 
 // #include "matrix.h"
 // #include "vector.h"
+#include "htool/htool.hpp"
+//#include "../include/htool/htool.hpp"
 
 
 // [[Rcpp::depends(RcppEigen)]]
