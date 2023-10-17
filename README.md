@@ -11,14 +11,12 @@ This repository contain a reproducible example of the article "Efficient estimat
 </br>
 
 * CXX_STD = CXX11
-* PKG_CXXFLAGS = `$`(SHLIB_OPENMP_CXXFLAGS) -I/Users/Usuario/Desktop/htps/htool/include -I"C:/Program Files (x86)/Microsoft SDKs/MPI/Include"
+* PKG_CXXFLAGS = `$`(SHLIB_OPENMP_CXXFLAGS) -Iinclude -I"C:/Program Files (x86)/Microsoft SDKs/MPI/Include"
 * PKG_LIBS = `$`(SHLIB_OPENMP_CXXFLAGS) `$`(LAPACK_LIBS) `$`(BLAS_LIBS) `$`(FLIBS) -L"C:/Program Files (x86)/Microsoft SDKs/MPI/Lib/x64" -lmsmpi
 </br>
 
-and the same for $\texttt{Makevars}$ file. Of course, you should replace 'Usuario' with the username you are using on your PC or laptop.
-   
-5. Compile the $\texttt{htps.cpp}$ which is in the $\textbf{htps}$ folder using "Rcpp" by following the the "build_package.R" code. Here you also have to replace "Usuario" with the username you are using on your PC or laptop.
-6. Run the "htps.R" code to reproduce the results.
+6. Compile the $\texttt{htps.cpp}$ which is in the $\textbf{htps}$ folder using "Rcpp" by following the the "build_package.R" code. Here you also have to replace "Usuario" with the username you are using on your PC or laptop.
+7. Run the "htps.R" code to reproduce the results.
 
 **IMPORTANT**
 The "htool" library used in this experiment is a slight adaptation of the original library written in $\texttt{c++}$ ([https://htool-documentation.readthedocs.io/en/latest/](https://github.com/htool-ddm/htool)). For a more comprehensive and original version of "htool" follow this link: https://htool-documentation.readthedocs.io/en/latest/
