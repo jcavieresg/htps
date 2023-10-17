@@ -3,20 +3,12 @@
 #include <Rcpp.h>
 #include <iostream>
 #include <fstream>
-//#include <htool/htool.hpp>
-#include <omp.h>
 #include <math.h>
 
-// #include "matrix.h"
-// #include "vector.h"
 #include "htool/htool.hpp"
-//#include "../include/htool/htool.hpp"
 
 
-// [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::plugins(openmp)]]
-
 
 using namespace Rcpp;
 using namespace arma;
@@ -340,15 +332,15 @@ Rcpp::List PLS(arma::mat dsites, arma::mat ctrs, int RBFtype, const double R, co
 // la matriz E+\alpha de [Green/Silverman]
 class TPS_Epa:
   public IMatrix<double>{
-  const vector<R3>& p1;
-  const vector<R3>& p2;
+  const std::vector<R3>& p1;
+  const std::vector<R3>& p2;
   
 public:
   // Constructor
-  TPS_Epa(const vector<R3>& p10, const vector<R3>& p20 ):
+  TPS_Epa(const std::vector<R3>& p10, const std::vector<R3>& p20 ):
   IMatrix(p10.size(),p20.size()),p1(p10),p2(p20), lambda(0.0){}
   
-  TPS_Epa(const vector<R3>& p10, const vector<R3>& p20, double a ):
+  TPS_Epa(const std::vector<R3>& p10, const std::vector<R3>& p20, double a ):
   IMatrix(p10.size(),p20.size()),p1(p10),p2(p20), lambda(a){}
   
   // Virtual function to overload
@@ -357,11 +349,6 @@ public:
       return lambda;
     else
       return norm2(p1[j]-p2[k])*norm2(p1[j]-p2[k])*log(norm2(p1[j]-p2[k]));
-    //if ( j == k)
-    //    return lambda;
-    //else
-    //    return norm2(p1[j]-p2[k])*norm2(p1[j]-p2[k])*log(norm2(p1[j]-p2[k]));
-    
   }
   
   // Matrix vector product
@@ -390,15 +377,18 @@ private:
   double lambda;
 };
 
+
+
+
 class TPS_Mat:
   public IMatrix<double>{
   
-  const vector<R3>& p1;
+  const std::vector<R3>& p1;
   TPS_Epa Epa;
   HMatrix<double,partialACA,GeometricClustering> H_Epa;
   
 public: 
-  TPS_Mat(const vector<R3>& p1_, double a ):
+  TPS_Mat(const std::vector<R3>& p1_, double a):
   IMatrix(p1_.size(),p1_.size()), p1(p1_), H_Epa(Epa, p1_), Epa(p1_, p1_, a){}
   
   // Virtual function to overload
@@ -425,34 +415,15 @@ public:
     std::vector<double> y;
     y.reserve(n);
     
-    //      std::cout << "----------" << std::endl;
-    //      for ( unsigned int j=0; j < y.size(); j++ )
-    //        std::cout << j << ", " << y[j] << std::endl;
-    
     y.resize(n-3,0);
     
-    //      std::cout << "----------" << std::endl;
-    //      for ( unsigned int j=0; j < y.size(); j++ )
-    //        std::cout << j << ", " << y[j] << std::endl;
-    
-    //      std::cout << "y.capacity() = " << y.capacity() << std::endl;
-    //      std::cout << "y.size() = " << y.size() << std::endl;
-    
-    vector<double>::const_iterator first = x.begin();
-    vector<double>::const_iterator last = x.end()-3;
-    vector<double> x1(first, last);
+    std::vector<double>::const_iterator first = x.begin();
+    std::vector<double>::const_iterator last = x.end()-3;
+    std::vector<double> x1(first, last);
     
     y = H_Epa*x1;
     
-    //      std::cout << "----------" << std::endl;
-    //      for ( unsigned int j=0; j < y.size(); j++ )
-    //        std::cout << j << ", " << y[j] << std::endl;
-    
     y.resize(n,0.0);
-    
-    //      std::cout << "----------" << std::endl;
-    //      for ( unsigned int j=0; j < y.size(); j++ )
-    //        std::cout << j << ", " << y[j] << std::endl;
     
     // el producto con transpuesta(T)
     for ( unsigned int j=0; j < n-3; j++ )
@@ -489,9 +460,6 @@ void  testTps(double Epsilon,
   std::ofstream timeh; timeh.open("timeh.dat"); timeh.close();
   std::ofstream timef; timef.open("timef.dat"); timef.close();
   
-  //
-  //std::vector<double> y,
-  
   // Initialize the MPI environment
   MPI_Init(NULL, NULL);
   
@@ -500,29 +468,7 @@ void  testTps(double Epsilon,
   SetEta(Eta);
   SetMinClusterSize(MinClusterSize);
   
-  /////////////////////////////////////
-  //           Pure C++
-  // int total = sizeof(dsites);
-  // 
-  // int dim = sizeof(dsites[0]);
-  // 
-  // // 'row' will be 10 = 70 / 7
-  // int N = total / dim;
-  
-  /////////////////////////////////////
-  //             RCPP
-  /////////////////////////////////////
-  //int N   = dsites.nrow();
-  // int dim = dsites.ncol();
-  //
-  
-  /////////////////////////////////////
-  // RCPPARMADILLO
-  // int N   = dsites.n_rows;
-  // int dim = dsites.n_cols;
-  // 
-  
-  
+
   //Funciona para rcpp y rcpparmadillo
   int K=5;
   for ( unsigned int k=5; k<K; ++k)
@@ -532,28 +478,16 @@ void  testTps(double Epsilon,
     size.open("size.dat", std::ios::out | std::ios::app);
     size << N << "\n";
     size.close();
-    vector<R3> p(N);     // p es del tama?o de los indices previamente declarados con I
+    std::vector<R3> p(N);     // p es del tama?o de los indices previamente declarados con I
     for(int j=0; j < N; j++){
       p[j][0] = j;
       p[j][1] = j;
       p[j][2] = 1.;
     }
     
-    // double z = 1;
-    // vector<R3> p(N);     // p es del tama?o de los indices previamente declarados con I
-    // for(int j=0; j < N; j++){
-    //     p[j][0] = dsites[j][0];
-    //     p[j][1] = dsites[j][1];
-    //     p[j][2] = z;
-    // }
-    
     start = clock();
     TPS_Mat A(p,lambda);
-    //lap = clock();
-    //std::cout << "Time for setting up matrix: "
-    //      << (lap-start)*1000.0 / CLOCKS_PER_SEC << std::endl;
-    
-    
+
     std::vector<double> x(N+3,1), result(N+3,0);
     //start = clock();
     result = A*x;
@@ -563,10 +497,6 @@ void  testTps(double Epsilon,
     timeh.open("timeh.dat", std::ios::out | std::ios::app);
     timeh << (end-start)*1000.0 / CLOCKS_PER_SEC << "\n";
     timeh.close();
-    
-    //for ( unsigned int j=0; j < N+3; j++ )
-    //  std::cout << result[j] << std::endl;
-    
     
     TPS_Epa Af(p,p, lambda);
     std::vector<double> xf(N,1),resultf(N,0);
@@ -578,24 +508,7 @@ void  testTps(double Epsilon,
     timef.open("timef.dat", std::ios::out | std::ios::app);
     timef << (end-start)*1000.0 / CLOCKS_PER_SEC << "\n";
     timef.close();
-  }
-  
-  
-  
-  
-  
-  // Output
-  // HA.print_infos();
-  // HA.save_plot("C:/Users/Usuario/Desktop/mypackage/smallest_example_plot");
-  // HA.get_target_cluster()->save_geometry(p.data(), outputpath + "/smallest_example_cluster", {1, 2, 3});
-  // std::cout << outputpath + "/smallest_example_plot" << std::endl;
-  // std::cout << Frobenius_absolute_error(HA, A) / A.norm() << std::endl;
-  // std::cout << norm2(A * x - result) / norm2(A * x) << std::endl;
-  
-  // Finalize the MPI environment.
-  //MPI_Finalize();
-  
-  
+    }
 }
 
 int main(void)
@@ -810,7 +723,9 @@ int main(void)
 // }
 
 
-
+//////////////////////////////////////////////////
+//              Conjugate gradient
+//////////////////////////////////////////////////
 arma::vec cg_arma_full(arma::mat A, arma::vec b, float tol = 1e-14, int maxIter = 1000) {
   /* 
    Input:
@@ -863,7 +778,7 @@ arma::vec cg_arma_full(arma::mat A, arma::vec b, float tol = 1e-14, int maxIter 
 } 
 
 //=======================================================================================
-//                          Conjugated Gradient (RcppArmadillo)
+//                          Conjugated Gradient Hmat
 //=======================================================================================
 // solve (E - S*M1)x = b with CG
 arma::vec cg_arma_hmat(HMatrix<double,partialACA,GeometricClustering> &E, arma::mat &M1, arma::mat &S, arma::vec &b, float tol = 1e-14, int maxIter = 1000) {
@@ -952,16 +867,14 @@ void mpifinalize()
 arma::vec calculateTPS_hmat(arma::mat &sites, arma::vec &values, arma::mat &M1, arma::mat &S,
                             double Epsilon, double Eta, int MinClusterSize, double lambda){
   
-  unsigned int N = sites.n_rows;        // Largo del n?mero de sitios
-  
-  //MPI_Init(NULL, NULL);
+  unsigned int N = sites.n_rows;        
   
   // Htool parameters
   SetEpsilon(Epsilon);
   SetEta(Eta);
   SetMinClusterSize(MinClusterSize);
   
-  vector<R3> sitios1(N);
+  std::vector<R3> sitios1(N);
   for(unsigned int j=0; j < N; j++){
     sitios1[j][0] = sites(j,0);
     sitios1[j][1] = sites(j,1);
