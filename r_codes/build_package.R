@@ -7,6 +7,6 @@ library(RcppArmadillo)
 library(pkgKitten)
 
 compileAttributes(verbose=TRUE) # Find and register Rcpp functions 
-# devtools::build() # build a package
+devtools::build() # build a package
 devtools::load_all() # load all functions
 
