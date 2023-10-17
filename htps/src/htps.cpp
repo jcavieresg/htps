@@ -3,6 +3,10 @@
 #include <Rcpp.h>
 #include <iostream>
 #include <fstream>
+<<<<<<< HEAD
+=======
+#include <omp.h>
+>>>>>>> 5380362c7185a9f4470c3bfbfd16849552b01fe5
 #include <math.h>
 
 #include "htool/htool.hpp"
@@ -100,10 +104,10 @@ arma::mat testfunction_random(arma::mat x, arma::mat y){
 // [[Rcpp::export]]
 void meshgrid(arma::mat & x, arma::mat & y, arma::vec & xv, arma::vec &yv){
   
-  /* Copia los valores de xv en cada fila de x, también copia los valores de 
+  /* Copia los valores de xv en cada fila de x, tambiÃ©n copia los valores de 
    yv en cada columna de y. 
-   x es una matriz de tamaño (y.n_elem, x.n_elem)
-   y es una matriz de tamaño (y_n_elem, x.n_elem)
+   x es una matriz de tamaÃ±o (y.n_elem, x.n_elem)
+   y es una matriz de tamaÃ±o (y_n_elem, x.n_elem)
    */
   
   int i;
@@ -297,7 +301,7 @@ Rcpp::List PLS(arma::mat dsites, arma::mat ctrs, int RBFtype, const double R, co
   // arma::colvec yridge = IMe * solve(IM, rhs3);
   // arma::colvec ysmooth = IM * solve(IM, rhs3);
   
-  // Calcular solucíon exacta, por ejemplo: evaluar 'testfunction' en los puntos de evaluacion
+  // Calcular solucÃ­on exacta, por ejemplo: evaluar 'testfunction' en los puntos de evaluacion
   // linea 26 programa 19.2
   arma::colvec exact = testfunction(epoints.col(0), epoints.col(1));
   //arma::colvec exact = testfunction_random(epoints.col(0), epoints.col(1));
@@ -658,7 +662,7 @@ int main(void)
 //     // combine together with previous Givens rotations
 //     Jtotal = J*Jtotal;
 //     
-//     //std::cout<< "Check orthogonality of Jtotal \n\n" << Â¬Jtotal*Jtotal;
+//     //std::cout<< "Check orthogonality of Jtotal \n\n" << Ã‚Â¬Jtotal*Jtotal;
 //     
 //     HH = Jtotal*H;
 //     
