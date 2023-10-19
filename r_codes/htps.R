@@ -205,11 +205,6 @@ for (k in 1:length(K)){
 }
 #=======================================================================================================
 
-# Finalize MPI
-mpifinalize() # ----> RUN THIS LINE ONLY WHEN YOU WANT TO CLOSE THE SESSION
-
-
-
 
 #===============================================================================================
 #                                       Results 
@@ -405,4 +400,7 @@ grid.arrange(plot1, plot3,  ncol = 2)
 #=========================
 rmse_mgcv <- rmse(as.numeric(z.pred), as.numeric(exact)); rmse_mgcv
 rmse_solh <- rmse(as.numeric(solh_eval), as.numeric(exact)); rmse_solh
+
+# Finalize MPI
+mpifinalize() # ----> RUN THIS LINE ONLY WHEN YOU WANT TO CLOSE THE SESSION
 
