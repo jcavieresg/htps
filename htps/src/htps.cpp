@@ -99,10 +99,10 @@ arma::mat testfunction_random(arma::mat x, arma::mat y){
 // [[Rcpp::export]]
 void meshgrid(arma::mat & x, arma::mat & y, arma::vec & xv, arma::vec &yv){
   
-  /* Copia los valores de xv en cada fila de x, también copia los valores de 
+  /* Copia los valores de xv en cada fila de x, tambiÃ©n copia los valores de 
    yv en cada columna de y. 
-   x es una matriz de tamaño (y.n_elem, x.n_elem)
-   y es una matriz de tamaño (y_n_elem, x.n_elem)
+   x es una matriz de tamaÃ±o (y.n_elem, x.n_elem)
+   y es una matriz de tamaÃ±o (y_n_elem, x.n_elem)
    */
   
   int i;
@@ -296,7 +296,7 @@ Rcpp::List PLS(arma::mat dsites, arma::mat ctrs, int RBFtype, const double R, co
   // arma::colvec yridge = IMe * solve(IM, rhs3);
   // arma::colvec ysmooth = IM * solve(IM, rhs3);
   
-  // Calcular solucíon exacta, por ejemplo: evaluar 'testfunction' en los puntos de evaluacion
+  // Calcular solucÃ­on exacta, por ejemplo: evaluar 'testfunction' en los puntos de evaluacion
   // linea 26 programa 19.2
   arma::colvec exact = testfunction(epoints.col(0), epoints.col(1));
   //arma::colvec exact = testfunction_random(epoints.col(0), epoints.col(1));
@@ -372,7 +372,7 @@ public:
     return norm;
   }
   
-private: 
+public: 
   double lambda;
 };
 
@@ -508,6 +508,7 @@ void  testTps(double Epsilon,
     timef << (end-start)*1000.0 / CLOCKS_PER_SEC << "\n";
     timef.close();
     }
+    MPI_Finalize();
 }
 
 int main(void)
@@ -517,209 +518,6 @@ int main(void)
 }
 
 
-
-
-// ////////////////////////////////////////////////////////////
-// vec GMRES(TPS_Mat& A, std::vector<double>& b, std::vector<double>& x0, double tol){
-//   
-//   //double tol=1e???6
-//   unsigned int n=x0.size(); // size of linear system
-//   
-//   // determine initial residual, r0 in vec form
-//   std::vector<double> aux(n,0), aux2(n,0);
-//   aux = A*x0;
-//   
-//   std::cout << aux.size() << std::endl;
-//   
-//   
-//   vec r0(n);
-//   for ( unsigned int j=0; j<n; ++j )
-//     r0(j+1) = b[j] - aux[j];
-//   
-//   //std::cout << "initial residual vec, r0 = b???A*x0 : \n\n" << r0;
-//   
-//   // need this in least square part later
-//   double normr0 = norm(r0);
-//   
-//   // initialise to enter while loop
-//   double residual = 1.0;
-//   
-//   // intialise vec v
-//   vec v = r0 / normr0;
-//   
-//   //std::cout << "initial vec v = r0 / | | ro | | : \n\n" << v;
-//   
-//   // Arnoldi / GMRES step index
-//   int k = 1;
-//   
-//   // Declare Givens rotation matrix, initialise Jtotal;
-//   matrix J, Jtotal;
-//   Jtotal = eye(2);
-//   
-//   // intialise H, declare tempMat, V, w
-//   matrix H(1,1), Htemp, HH, bb(1,1), c, cc;
-//   matrix tempMat, V, Vold, hNewCol;
-//   vec w(n), vj(v.rows);
-//   
-//   bb(1,1) = normr0;
-//   
-//   // initialise matrix V (matrix of orthogonal basis vecs)
-//   V = v;
-// 
-//   while ( (residual > tol) && ( k < 100) )
-//   {
-//     //std::cout<< " \n\n";
-//     
-//     // update Vold (used for checking Arnoldi later)
-//     Vold = V;
-//     
-//     H = resize(H, k+1,k);
-//     
-//     
-//     // Arnoldi steps (using Gram???Schmidt process)
-//     // w = mat2vec(A*v);
-//     // we need to multiply with A using std::vector<double>
-//     for ( unsigned int j=0; j<n; ++j )
-//       aux[j] = v(j+1);
-//     
-//     aux2 = A*aux;
-//     
-//     for ( unsigned int j=0; j<n; ++j )
-//       w(j+1) = aux2[j];
-//     
-//     
-//     //std::cout<< "(k = " << k <<") : vec w=Av : \n\n" << w;
-//     
-//     for (int j=1; j <= k; j++)
-//     {
-//       for (int i=1; i <= rows(V); i++)
-//       {// set the vec vj to be jth column of V
-//         vj(i)=V(i,j);
-//       }
-//       
-//       tempMat = t(vj)*w;
-//       
-//       // these two lines calculate the inner product
-//       H(j,k)= tempMat(1,1);
-//       //std::cout<< "H("<<j<<","<<k<<")= "<<H(j,k)<<"\n\n";
-//       
-//       w = w - H(j,k)*vj;
-//       //std::cout<< "Gramm-Schmidt update of vec w: \n\n" << w;
-//     }
-//     
-//     H(k +1, k) = norm(w);
-//     //std::cout<< "H(" << k+1 << "," << k << ")= " << H(k+1,k) << "\n\n";
-//     
-//     v = w / H(k +1, k);
-//     //std::cout<< "(k = " << k <<") :new vec v: \n\n" << v;
-//     
-//     // add one more column to matrix V
-//     V = resize(V, rows(V),k+1);
-//     
-//     for (int i=1; i <= rows(V); i++)
-//     {
-//       // copy entries of v to new column of V
-//       V(i, k + 1) = v(i);
-//     }
-//     
-//     //std::cout<< "(k = " << k << ") :latest matrix, V: \n\n" << V;
-//     
-//     //std::cout << "(k = " << k <<") :latest matrix, H: \n\n" << H;
-//     
-//     //std::cout << "check: AV[k] = V[k+1]H: \n\n" << A*Vold << V*H;
-//     
-//     /////////////////////////////// Least squares step //////////////////////
-//     
-//     if (k==1)
-//     {
-//       // First pass through, Htemp=H
-//       Htemp = H;
-//     }
-//     else
-//     {
-//       // for subsequent passes, Htemp=Jtotal*H
-//       Jtotal = resize(Jtotal, k +1, k + 1);
-//       Jtotal(k + 1, k + 1) = 1;
-//       Htemp = Jtotal*H;
-//     }
-//     
-//     // Form next Givens rotation matrix
-//     J = eye( k - 1);
-//     J = resize(J,k+1,k+1);
-//     
-//     J(k,k)=Htemp(k,k)/pow(pow(Htemp(k,k),2)+pow(Htemp(k+1,k),2),0.5);
-//     J(k,k+1)=Htemp(k+1,k)/pow(pow(Htemp(k,k),2)+pow(Htemp(k+1,k),2),0.5);
-//     J(k+1,k)= -Htemp(k+1,k)/pow(pow(Htemp(k,k),2)+pow(Htemp(k+1,k),2),0.5);
-//     J(k+1,k+1)=Htemp(k,k)/pow(pow(Htemp(k,k),2)+pow(Htemp(k+1,k),2),0.5);
-//     
-//     //std::cout<< "J: \n\n" << J;
-//     
-//     // combine together with previous Givens rotations
-//     Jtotal = J*Jtotal;
-//     
-//     //std::cout<< "Check orthogonality of Jtotal \n\n" << Â¬Jtotal*Jtotal;
-//     
-//     HH = Jtotal*H;
-//     
-//     for (int i=1; i <= k+1; i++)
-//     {
-//       for (int j=1; j <= k; j++)
-//       {
-//         // set all 'small' values to zero
-//         if (abs(HH(i,j)) < 1e-15)
-//         {
-//           HH(i,j)=0;
-//         }
-//       }
-//     }
-//     
-//     //std::cout<< "Check Jtotal*H is upper triangular: \n\n" << HH;
-//     
-//     bb = resize(bb,k+1,1);
-//     
-//     //std::cout<< "bb: \n\n" << bb;
-//     
-//     c=Jtotal*bb;
-//     
-//     //std::cout<< "c=J*bb: \n\n" << c;
-//     
-//     residual = fabs(c(k+1,1));
-//     
-//     std::cout<< k << "th residual: \n\n" << residual << "\n\n";
-//     k++;
-//   }
-//    
-//   
-//   std::cout<< "GMRES iteration converged in " << k - 1 << " steps\n\n";
-//   // Extract upper triangular square matrix
-//   HH = resize(HH, rows(HH) - 1, columns(HH));
-// 
-//   //std::cout<< "HH: \n\n" << HH;
-//   
-//   cc = resize(c, rows(HH),1);
-//   
-//   //std::cout<< "cc: \n\n" << cc;
-//   
-//   
-//   //yy = cc/HH; // solve linear system
-//   matrix yy = cc / HH; // solve linear system
-//   
-//   vec y = mat2vec(yy);
-//   
-//   //std::cout<< "y: \n\n" << y;
-//   
-//   // chop the newest column off of matrix V
-//   V = resize(V, rows(V), columns(V) - 1);
-//   
-//   // reuse r0
-//   for ( unsigned int j=0; j<n; ++j )
-//     r0(j+1) = x0[j];
-//   
-//   vec x = mat2vec(r0 + V*y);
-//   
-//   return x;
-//   //return Rcpp::List::create(Rcpp::Named("x_coefficients") = x);
-// }
 
 
 //////////////////////////////////////////////////
