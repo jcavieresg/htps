@@ -1,4 +1,4 @@
-rm(list = ls())
+# rm(list = ls())
 library(matlib)
 library(pracma)
 library(gridExtra)
@@ -7,19 +7,21 @@ library(plot3D)
 library(mgcv)
 
 
+# Initialize MPI 
+mpiinit() # -----> RUN THIS LINE JUST ONCE!
+
+
+
 #===============================================================================================
 #                        Main code of the Smoothing TPS and H-matrix
 #===============================================================================================
 set.seed(1234)                       # Fix the seed
 library(Metrics)
 
-# Initialize MPI
-mpiinit()
-
 alpha = 1 # smoothing parameter
 shape = 1 # shape parameter of the RBF
 
-K = seq(20, 40, by=2)               # Sequence of grids 20^2 to 40^2
+K = seq(20, 30, by=2)               # Sequence of grids 20^2 to 40^2
 
 nosites <- vector()             # N sites
 time_full <- vector()           # Solve function
@@ -110,10 +112,7 @@ for (k in 1:length(K)){
   # error_krig[k] <- norm(as.matrix(head(sol0,-3)) - as.matrix(solkrig))
   
   
-  
-  
-  
-  # =====================================================================
+    # =====================================================================
   # full matrix with CG solver
   # =====================================================================
   tic <- tic()
@@ -155,8 +154,7 @@ for (k in 1:length(K)){
   solf[s2] <- delta2
   solf[(N+1):(N+3)] <- a
   
-  
-  toc <- toc()
+    toc <- toc()
   time_full_cg[k] <- toc
   error_full_cg[k] <- norm(as.matrix(head(sol0, -3))- as.matrix(head(solf, -3)))
   
@@ -173,8 +171,7 @@ for (k in 1:length(K)){
   val2 <- c(val[s2],c(0,0,0))
   
   
-  
-  # Distances
+    # Distances
   distances12 <- DistanceMatrix(loc1,loc2)
   E12 <- radialFunction(distances12, 2, 1, shape)
   distances22 <- DistanceMatrix(loc2,loc2)
@@ -208,8 +205,8 @@ for (k in 1:length(K)){
 }
 #=======================================================================================================
 
-  # Finalize MPI
-  mpifinalize()
+# Finalize MPI
+mpifinalize() # ----> RUN THIS LINE ONLY WHEN YOU WANT TO CLOSE THE SESSION
 
 
 
@@ -223,10 +220,6 @@ for (k in 1:length(K)){
 #==========
 error_solcg <- norm(matrix(sol0) - matrix(solf)); error_solcg
 error_solh <- norm(matrix(sol0) - matrix(solh)); error_solh
-
-
-
-
 
 
 #==============================================
@@ -306,15 +299,12 @@ plot1 <- ggplot(data=df1, aes(x=log(x), y=log(y1), color = "y1")) +
         axis.title=element_text(size=14,face="bold")) 
 
 
-
-
 #=================================================
 #             COMP. ERROR (log scale)
 #=================================================
 library(dplyr)
 df4 <- data.frame(nosites, error_mgcv)
 df5 <- data.frame(nosites, error_hmat)
-
 
 
 # Merge data frames using dplyr package
@@ -346,9 +336,6 @@ plot2 <- ggplot(newdata3, aes(x = log(nosites))) +
 grid.arrange(plot1, plot2, ncol= 2)
 
 
-
-
-
 # Confidence intervals (95% confidence level)
 conf_level <- 0.95
 z_value <- qnorm(1 - (1 - conf_level) / 2)
@@ -377,9 +364,6 @@ plot1 <- ggplot(results, aes(x = x, y = y, fill = pred_value)) +
         legend.position = "right", legend.key.height= unit(2.5, 'cm'),
         legend.key.width= unit(0.5, 'cm'),
         legend.box.spacing = unit(0.5, "cm"))
-
-
-
 
 
 # Confidence intervals (95% confidence level)
@@ -416,19 +400,9 @@ library(ggpubr)
 grid.arrange(plot1, plot3,  ncol = 2)
 
 
-
-
-
-
-
-
 #=========================
 #        Table 7
 #=========================
 rmse_mgcv <- rmse(as.numeric(z.pred), as.numeric(exact)); rmse_mgcv
 rmse_solh <- rmse(as.numeric(solh_eval), as.numeric(exact)); rmse_solh
-
-
-
-
 
