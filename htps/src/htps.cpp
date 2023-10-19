@@ -156,27 +156,6 @@ arma::mat DistanceMatrix(const arma::mat dsites, const arma::mat ctrs){
 
 
 
-////////////////////////////////////////////////////////////
-// [[Rcpp::export]]
-arma::mat euclidean_dist(const arma::mat dsites){
-  
-  int n  = dsites.n_rows;
-  // int dim = dsites.n_cols;
-  // int N   = ctrs.n_rows;
-  arma::mat DM_data(n, n, fill::zeros);
-  //arma::mat DM_data(M, N, arma::fill::zeros);
-  
-  for (int i = 0; i < n; i++){
-    for (int j = 0; j < i; j++){
-      DM_data(i, j) = sqrt(sum(pow(dsites.row(i) - dsites.row(j), 2)));
-      DM_data(j, i) = DM_data(i, j);
-    }
-  }
-  return(DM_data);
-}
-//_______________________________________________________________________________
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // [[Rcpp::export]]
