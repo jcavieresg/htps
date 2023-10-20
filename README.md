@@ -16,7 +16,7 @@ This repository contain a reproducible example of the article "Efficient estimat
 </br>
 
 6. Compile the $\texttt{htps.cpp}$ which is in the $\textbf{htps}$ folder using "Rcpp" by following the "build_package.R" code. Here you also have to replace "Usuario" with the username you are using on your PC or laptop.
-7. Run the "htps.R" code to reproduce the results.
+7. Run the "htps.R" code to reproduce the main results.
 
 **IMPORTANT**
 The "htool" library used in this experiment is a slight adaptation of the original library written in $\texttt{c++}$ ([https://htool-documentation.readthedocs.io/en/latest/](https://github.com/htool-ddm/htool)). For a more comprehensive and original version of "htool" follow this link: https://htool-documentation.readthedocs.io/en/latest/
