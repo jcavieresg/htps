@@ -23,17 +23,17 @@ shape = 1 # shape parameter of the RBF
 
 K = seq(20, 30, by=2)               # Sequence of grids 20^2 to 40^2
 
-nosites <- vector()             # N sites
-time_full <- vector()           # Solve function
-time_full_cg <- vector()        # CG 
-time_hmat <- vector()           # CG + H-matrix
-time_mgcv <- vector()           # CG + H-matrix
-#time_krig <- vector()           # CG + H-matrix
+nosites <- vector()                # N sites
+time_full <- vector()           
+time_full_cg <- vector()        
+time_hmat <- vector()           
+time_mgcv <- vector()           
+#time_krig <- vector()          
 
-error_full_cg <- vector()       # Error CG
-error_hmat <- vector()          # Error CG + H matrix
-error_mgcv <- vector()          # Error mgcv
-#error_krig <- vector()          # Error Kriging
+error_full_cg <- vector()          # Error CG
+error_hmat <- vector()             # Error CG + H matrix
+error_mgcv <- vector()             # Error mgcv
+#error_krig <- vector()            # Error Kriging
 
 
 for (k in 1:length(K)){
