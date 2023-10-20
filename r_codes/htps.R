@@ -112,7 +112,10 @@ for (k in 1:length(K)){
   # error_krig[k] <- norm(as.matrix(head(sol0,-3)) - as.matrix(solkrig))
   
   
-    # =====================================================================
+  
+  
+  
+  # =====================================================================
   # full matrix with CG solver
   # =====================================================================
   tic <- tic()
@@ -154,7 +157,8 @@ for (k in 1:length(K)){
   solf[s2] <- delta2
   solf[(N+1):(N+3)] <- a
   
-    toc <- toc()
+  
+  toc <- toc()
   time_full_cg[k] <- toc
   error_full_cg[k] <- norm(as.matrix(head(sol0, -3))- as.matrix(head(solf, -3)))
   
@@ -171,7 +175,8 @@ for (k in 1:length(K)){
   val2 <- c(val[s2],c(0,0,0))
   
   
-    # Distances
+  
+  # Distances
   distances12 <- DistanceMatrix(loc1,loc2)
   E12 <- radialFunction(distances12, 2, 1, shape)
   distances22 <- DistanceMatrix(loc2,loc2)
@@ -206,6 +211,7 @@ for (k in 1:length(K)){
 #=======================================================================================================
 
 
+
 #===============================================================================================
 #                                       Results 
 #===============================================================================================
@@ -215,6 +221,10 @@ for (k in 1:length(K)){
 #==========
 error_solcg <- norm(matrix(sol0) - matrix(solf)); error_solcg
 error_solh <- norm(matrix(sol0) - matrix(solh)); error_solh
+
+
+
+
 
 
 #==============================================
@@ -294,12 +304,15 @@ plot1 <- ggplot(data=df1, aes(x=log(x), y=log(y1), color = "y1")) +
         axis.title=element_text(size=14,face="bold")) 
 
 
+
+
 #=================================================
 #             COMP. ERROR (log scale)
 #=================================================
 library(dplyr)
 df4 <- data.frame(nosites, error_mgcv)
 df5 <- data.frame(nosites, error_hmat)
+
 
 
 # Merge data frames using dplyr package
@@ -331,6 +344,9 @@ plot2 <- ggplot(newdata3, aes(x = log(nosites))) +
 grid.arrange(plot1, plot2, ncol= 2)
 
 
+
+
+
 # Confidence intervals (95% confidence level)
 conf_level <- 0.95
 z_value <- qnorm(1 - (1 - conf_level) / 2)
@@ -359,6 +375,9 @@ plot1 <- ggplot(results, aes(x = x, y = y, fill = pred_value)) +
         legend.position = "right", legend.key.height= unit(2.5, 'cm'),
         legend.key.width= unit(0.5, 'cm'),
         legend.box.spacing = unit(0.5, "cm"))
+
+
+
 
 
 # Confidence intervals (95% confidence level)
@@ -395,12 +414,17 @@ library(ggpubr)
 grid.arrange(plot1, plot3,  ncol = 2)
 
 
+
 #=========================
 #        Table 7
 #=========================
 rmse_mgcv <- rmse(as.numeric(z.pred), as.numeric(exact)); rmse_mgcv
 rmse_solh <- rmse(as.numeric(solh_eval), as.numeric(exact)); rmse_solh
 
+
 # Finalize MPI
 mpifinalize() # ----> RUN THIS LINE ONLY WHEN YOU WANT TO CLOSE THE SESSION
+
+
+
 
