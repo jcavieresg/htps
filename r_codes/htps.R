@@ -249,14 +249,12 @@ M0_val <- rbind(cbind(EM_val,T0_val))
 solh_eval <- M0_val %*% solh
 
 #====================================
-# Fit TPSR (from mgcv library)
+# Prediction from TPSR 
 #====================================
-
-fit_tpsr <- gam(z ~ s(x, y, bs="tp", k = k), method="REML")
 z_pred <- matrix(predict(fit_tpsr, newdata = data.frame(xy)), nrow = ng, ncol = ng)
 
 
-#Fitted points
+# Sd
 z_pred_sd <- predict(fit_tpsr, se.fit = TRUE)
 
 #Show points and surface
