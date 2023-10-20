@@ -16,3 +16,4 @@ devtools::load_all() # load all functions
 # devtools::check() # check whether the package is OK
 # devtools::build() # build a package
 
+

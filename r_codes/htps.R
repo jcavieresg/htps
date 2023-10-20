@@ -1,4 +1,4 @@
-# rm(list = ls())
+rm(list = ls())
 library(matlib)
 library(pracma)
 library(gridExtra)
@@ -15,24 +15,24 @@ mpiinit() # -----> RUN THIS LINE JUST ONCE!
 #===============================================================================================
 #                        Main code of the Smoothing TPS and H-matrix
 #===============================================================================================
-set.seed(1234)                       # Fix the seed
+set.seed(1234)                     # Fix the seed
 library(Metrics)
 
-alpha = 1 # smoothing parameter
-shape = 1 # shape parameter of the RBF
+alpha = 1                          # smoothing parameter
+shape = 1                          # shape parameter of the RBF
 
-K = seq(20, 30, by=2)               # Sequence of grids 20^2 to 40^2
+K = seq(20, 40, by=2)              # Sequence of grids 
 
 nosites <- vector()                # N sites
 time_full <- vector()           
 time_full_cg <- vector()        
 time_hmat <- vector()           
-time_mgcv <- vector()           
+time_tpsr <- vector()           
 #time_krig <- vector()          
 
 error_full_cg <- vector()          # Error CG
 error_hmat <- vector()             # Error CG + H matrix
-error_mgcv <- vector()             # Error mgcv
+error_tpsr <- vector()             # Error tpsr
 #error_krig <- vector()            # Error Kriging
 
 
@@ -76,12 +76,15 @@ for (k in 1:length(K)){
   #=====================================================================
   # mgcv
   #=====================================================================
+  x <- loc[, 1]
+  y <- loc[, 2]
+  z <- val
   tic <- tic()
-  fit_mgcv <- gam(val ~ s(loc[, 1], loc[, 2], bs="tp", k = k), method="REML")
-  solmgcv <- fit_mgcv$fitted.values
+  fit_tpsr <- gam(z ~ s(x, y, bs="tp", k = K[k]), method="REML")
+  soltpsr <- fit_tpsr$fitted.values
   toc <- toc()
-  time_mgcv[k] <- toc
-  error_mgcv[k] <- norm(as.matrix(head(sol0,-3)) - as.matrix(solmgcv))
+  time_tpsr[k] <- toc
+  error_tpsr[k] <- norm(as.matrix(head(sol0,-3)) - as.matrix(soltpsr))
   
   
   #=====================================================================
@@ -110,8 +113,6 @@ for (k in 1:length(K)){
   # toc <- toc()
   # time_krig[k] <- toc
   # error_krig[k] <- norm(as.matrix(head(sol0,-3)) - as.matrix(solkrig))
-  
-  
   
   
   
@@ -231,23 +232,36 @@ error_solh <- norm(matrix(sol0) - matrix(solh)); error_solh
 #      Additional comparisons (vs TPSR)
 #==============================================
 
-# locations
-x <- loc[, 1]
-y <- loc[, 2]
-z <- val 
+# New grid for interpolation
+ng = 40
+x.pred <- seq(0, 1, length.out = ng)
+y.pred <- seq(0, 1, length.out = ng)
+xy <- expand.grid( x = x.pred, y = y.pred)
+xy <- as.matrix(xy)
+class(xy)
 
+exact <- testfunction(matrix(xy[, 1]), matrix(xy[, 2])) 
 
-#Fit 2D thin-plate regression spline
-fit_gam <- gam(z ~ s(x,y, bs="tp", k = 80), method="REML")
-z_pred <- matrix(predict(fit_gam, newdata = data.frame(xy)), nrow = ng, ncol = ng)
+DM_val <- DistanceMatrix(xy, loc)
+EM_val <- radialFunction(DM_val, 2, 1.0, shape)
+T0_val <- cbind(1, xy)
+M0_val <- rbind(cbind(EM_val,T0_val))
+solh_eval <- M0_val %*% solh
+
+#====================================
+# Fit TPSR (from mgcv library)
+#====================================
+
+#fit_tpsr <- gam(z ~ s(x, y, bs="tp", k = k), method="REML")
+z_pred <- matrix(predict(fit_tpsr, newdata = data.frame(xy)), nrow = ng, ncol = ng)
 
 
 #Fitted points
-z_pred_sd <- predict(fit_gam, se.fit = TRUE)
+z_pred_sd <- predict(fit_tpsr, se.fit = TRUE)
 
 #Show points and surface
 par(mfrow = c(1, 2), mar = c(2.5, 2.5, 2.5, 3))
-# GAM model
+# TPSR
 scatter3D(xy[, 1], xy[, 2], z_pred, bty = "g", pch = ".", cex = 4,
           theta = 132, phi = 25, 
           colkey = list(side = 4, length = 1, cex.axis = 1.6),
@@ -273,11 +287,11 @@ scatter3D(xy[, 1], xy[, 2], solh_eval, bty = "g", pch = ".", cex = 4,
 #==========================================
 #         COMP. TIME (log scale)
 #==========================================
-# Una manera de hacerlo
-df1 <- data.frame(nosites, time_mgcv)
+df1 <- data.frame(nosites, time_tpsr)
 df2 <- data.frame(nosites, time_hmat)
 
 # Merge data frames using dplyr package
+library(dplyr)
 newdata <- df1 %>%
   left_join(df2, by = "nosites") 
 
@@ -303,45 +317,7 @@ plot1 <- ggplot(data=df1, aes(x=log(x), y=log(y1), color = "y1")) +
         legend.position="top",
         axis.title=element_text(size=14,face="bold")) 
 
-
-
-
-#=================================================
-#             COMP. ERROR (log scale)
-#=================================================
-library(dplyr)
-df4 <- data.frame(nosites, error_mgcv)
-df5 <- data.frame(nosites, error_hmat)
-
-
-
-# Merge data frames using dplyr package
-newdata3 <- df4 %>%
-  left_join(df5, by = "nosites") 
-
-colors2 <- c("M1 - TPSR" = "black", "M1 - M3" = "red")
-
-
-plot2 <- ggplot(newdata3, aes(x = log(nosites))) +
-  geom_point(aes(x = log(nosites), y = log(error_mgcv), colour = "M1 - GAM"), size = 3, shape = 0) +
-  geom_line(aes(y = log(error_mgcv), color = "M1 - TPSR"), linetype = "dashed") +
-  geom_point(y = log(error_hmat), size = 3, color = "red", shape = 2) +
-  geom_line(aes(y = log(error_hmat), color = "M1 - M3"), linetype = "dashed") +
-  xlab("log(number of sites)") +
-  ylab("log(Error value)") +
-  labs(color='')  +
-  scale_color_manual(#values = colors2, labels = c("M1 - TPSR", "M1 - Kriging", "M1 - M3"), 
-    values = colors2, labels = c("M1 - TPSR", "M1 - M3"),
-    guide = guide_legend(override.aes = list(linetype = c("dashed", "dashed"),
-                                             shape = c(0, 2)))) +
-  theme(legend.title = element_text(size=18, face = "bold"),
-        legend.text = element_text(size=18),
-        legend.position="top",
-        axis.text=element_text(size=14, face = "bold"),
-        axis.title=element_text(size=14,face="bold"),
-        legend.spacing.x = unit(0.5, 'cm')) 
-
-grid.arrange(plot1, plot2, ncol= 2)
+plot1
 
 
 
@@ -418,13 +394,10 @@ grid.arrange(plot1, plot3,  ncol = 2)
 #=========================
 #        Table 7
 #=========================
-rmse_mgcv <- rmse(as.numeric(z.pred), as.numeric(exact)); rmse_mgcv
+rmse_tpsr <- rmse(as.numeric(z_pred), as.numeric(exact)); rmse_tpsr
 rmse_solh <- rmse(as.numeric(solh_eval), as.numeric(exact)); rmse_solh
 
 
 # Finalize MPI
 mpifinalize() # ----> RUN THIS LINE ONLY WHEN YOU WANT TO CLOSE THE SESSION
-
-
-
 
