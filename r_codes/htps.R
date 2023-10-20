@@ -21,11 +21,7 @@ library(Metrics)
 alpha = 1                          # smoothing parameter
 shape = 1                          # shape parameter of the RBF
 
-<<<<<<< HEAD
 K = seq(20, 40, by=2)              # Sequence of grids 
-=======
-K = seq(20, 80, by=2)              # Sequence of grids 
->>>>>>> 71b381d032e8157bc66cdd938cbc55cba430f018
 
 nosites <- vector()                # N sites
 time_full <- vector()           
@@ -243,26 +239,9 @@ y.pred <- seq(0, 1, length.out = ng)
 xy <- expand.grid( x = x.pred, y = y.pred)
 xy <- as.matrix(xy)
 class(xy)
-<<<<<<< HEAD
-=======
 
 exact <- testfunction(matrix(xy[, 1]), matrix(xy[, 2])) 
 
-DM_val <- DistanceMatrix(xy, loc)
-EM_val <- radialFunction(DM_val, 2, 1.0, shape)
-T0_val <- cbind(1, xy)
-M0_val <- rbind(cbind(EM_val,T0_val))
-solh_eval <- M0_val %*% solh
-
-#====================================
-# Prediction from TPSR 
-#====================================
-z_pred <- matrix(predict(fit_tpsr, newdata = data.frame(xy)), nrow = ng, ncol = ng)
->>>>>>> 71b381d032e8157bc66cdd938cbc55cba430f018
-
-exact <- testfunction(matrix(xy[, 1]), matrix(xy[, 2])) 
-
-<<<<<<< HEAD
 DM_val <- DistanceMatrix(xy, loc)
 EM_val <- radialFunction(DM_val, 2, 1.0, shape)
 T0_val <- cbind(1, xy)
@@ -278,9 +257,6 @@ z_pred <- matrix(predict(fit_tpsr, newdata = data.frame(xy)), nrow = ng, ncol = 
 
 
 #Fitted points
-=======
-# Sd
->>>>>>> 71b381d032e8157bc66cdd938cbc55cba430f018
 z_pred_sd <- predict(fit_tpsr, se.fit = TRUE)
 
 #Show points and surface
