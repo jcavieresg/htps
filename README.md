@@ -7,7 +7,7 @@ This repository contain a reproducible example of the article "Efficient estimat
 2. Copy a and paste the folder $\textbf{htps}$ in your desktop.
 3. Download MPI for Windows: https://www.microsoft.com/en-us/download/details.aspx?id=105289
 4. Download the Microsoft SDK (to link the header libraries): https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/
-5. Ensure that you correctly link the "htool.hpp" $\texttt{c++}$ header library and the MPI folder in your $\texttt{Makevars}$ file. So, for the $\texttt{Makevars.win}$:
+5. Make sure that you correctly link the $\texttt{htool.hpp}$ (c++ header file) and the MPI folder to $\texttt{htps.cpp}$ using the $\texttt{Makevars}$ file. It should be set up as follows:
 </br>
 
 * CXX_STD = CXX11
@@ -15,8 +15,8 @@ This repository contain a reproducible example of the article "Efficient estimat
 * PKG_LIBS = `$`(SHLIB_OPENMP_CXXFLAGS) `$`(LAPACK_LIBS) `$`(BLAS_LIBS) `$`(FLIBS) -L"C:/Program Files (x86)/Microsoft SDKs/MPI/Lib/x64" -lmsmpi
 </br>
 
-6. Compile the $\texttt{htps.cpp}$ which is in the $\textbf{htps}$ folder using "Rcpp" by following the "build_package.R" code. Here you also have to replace "Usuario" with the username you are using on your PC or laptop.
-7. Run the "htps.R" code to reproduce the results.
+6. Compile the $\texttt{htps.cpp}$ which is in the $\textbf{htps}$ folder using "Rcpp" by following the "build_package.R" code. Here you have to replace "Usuario" with the username you are using on your PC or laptop.
+7. Run the "htps.R" code to reproduce the main results.
 
 **IMPORTANT**
 The "htool" library used in this experiment is a slight adaptation of the original library written in $\texttt{c++}$ ([https://htool-documentation.readthedocs.io/en/latest/](https://github.com/htool-ddm/htool)). For a more comprehensive and original version of "htool" follow this link: https://htool-documentation.readthedocs.io/en/latest/
