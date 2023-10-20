@@ -21,7 +21,7 @@ library(Metrics)
 alpha = 1 # smoothing parameter
 shape = 1 # shape parameter of the RBF
 
-K = seq(20, 30, by=2)               # Sequence of grids 20^2 to 40^2
+K = seq(20, 80, by=2)               # Sequence of grids 20^2 to 80^2
 
 nosites <- vector()                # N sites
 time_full <- vector()           
