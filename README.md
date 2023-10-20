@@ -7,7 +7,7 @@ This repository contain a reproducible example of the article "Efficient estimat
 2. Copy a and paste the folder $\textbf{htps}$ in your desktop.
 3. Download MPI for Windows: https://www.microsoft.com/en-us/download/details.aspx?id=105289
 4. Download the Microsoft SDK (to link the header libraries): https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/
-5. Ensure that you correctly link the $\texttt{htool.hpp}$ (header c++ file) and the MPI folder in your $\texttt{Makevars}$ file. So, for the $\texttt{Makevars.win}$:
+5. Ensure that you correctly link the $\texttt{htool.hpp}$ (header c++ file) and the MPI folder to the $\texttt{htps.cpp}$ using the $\texttt{Makevars}$ file. It should be like this:
 </br>
 
 * CXX_STD = CXX11
