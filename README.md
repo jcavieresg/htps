@@ -15,7 +15,7 @@ This repository contain a reproducible example of the article "Efficient estimat
 * PKG_LIBS = `$`(SHLIB_OPENMP_CXXFLAGS) `$`(LAPACK_LIBS) `$`(BLAS_LIBS) `$`(FLIBS) -L"C:/Program Files (x86)/Microsoft SDKs/MPI/Lib/x64" -lmsmpi
 </br>
 
-6. Compile the $\texttt{htps.cpp}$ which is in the $\textbf{htps}$ folder using "Rcpp" by following the "build_package.R" code. Here you have to replace "Usuario" with the username you are using on your PC or laptop.
+6. Compile the $\texttt{htps.cpp}$ which is in the **htps** folder using "Rcpp" by following the "build_package.R" code. Here you have to replace "Usuario" with the username you are using on your PC or laptop.
 7. Run the "htps.R" code to reproduce the main results.
 
 **IMPORTANT**
