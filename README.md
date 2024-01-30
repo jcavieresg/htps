@@ -1,7 +1,7 @@
 # Htps 
 ### Efficient spatial interpolation using R
 
-This repository contain a reproducible example of the article "Efficient estimation for a smoothing thin plate spline in a two-dimensional space". For this, do the following:
+This repository contains a reproducible example of the article "Efficient estimation for a smoothing thin plate spline in a two-dimensional space". For this, do the following:
 
 1. Download all the folders of this repository (folders **r\_codes** and **htps**).
 2. Copy a and paste the folder **htps** in your <ins>desktop</ins>
